@@ -10,9 +10,9 @@ The Great DANE Tools is a collection of projects hosted by Grier Forensics to de
 
 The Great DANE Tools combines instances of:
 
-- the Great DANE Engine, which is used to look up DANE SMIMEA records in the DNS
-- the Great DANE Connector, which is used to generate SMIMEA records
-- Great DANE Instant Test, which enables users to test DANE SMIMEA support for their email address
+- the [Great DANE Engine](https://github.com/grierforensics/Great-DANE-Engine), which is used to look up DANE SMIMEA records in the DNS
+- the [Great DANE Connector](https://github.com/grierforensics/Great-DANE-Connector), which is used to generate SMIMEA records
+- Great DANE Instant Test, which allows users to test DANE SMIMEA support for their email address
 
 This repository contains all the necessary configuration files used to host the Great DANE Tools at https://tools.greatdane.io.
 
