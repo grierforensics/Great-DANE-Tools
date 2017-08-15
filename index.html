@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2017 Grier Forensics. All Rights Reserved. -->
+
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Great DANE Connector</title>
+
+<!-- Apple iOS Safari settings -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div class="jumbotron">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6">
+        <h1 class="display-3">Tools</h1>
+        <p class="lead">Explore DANE SMIMEA</p>
+      </div>
+      <div class="col-xs-6">
+        <img class="pull-right img-responsive" src="GreatDaneLogo3.0_wTagline_WEB.png" height="185px" width="450px"></img>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#test" aria-controls="test" role="tab" data-toggle="tab">Test SMIMEA Support</a></li>
+      <li role="presentation"><a href="#generate" aria-controls="generate" role="tab" data-toggle="tab">Generate SMIMEA Record</a></li>
+      <li role="presentation"><a href="#lookup" aria-controls="lookup" role="tab" data-toggle="tab">Lookup SMIMEA Records</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+
+      <div role="tabpanel" class="tab-pane active" id="test">
+        <p>Send an email to <code>instanttest@greatdane.io</code> to test whether you have full DANE SMIMEA support.</p>
+        <p>If your mail client is capable of retrieving SMIMEA records from the DNS, it should be able to obtain the S/MIME certificate for <code>instanttest@greatdane.io</code> which it should then use to encrypt the outgoing email.</p>
+        <p>If you have an SMIMEA record published in the DNS for your email address, we should be able to retrieve your S/MIME certificate, and the response you receive from <code>instanttest@greatdane.io</code> will be encrypted. Otherwise, if there are any issues, we'll let you know.</p>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="generate">
+
+        <p>Use the form below to generate an SMIMEA record. Enter your email address and paste your base-64 S/MIME certificate (i.e. PEM) into the form to create the DNS record, or omit the certificate to have the Great DANE Connector generate a self-signed certificate for you.</p>
+        <form id="generate-form" class="form-horizontal">
+          <div class="form-group">
+            <label for="generate-email" class="col-sm-2 control-label">Email Address:</label>
+            <div class="col-sm-10">
+              <input id="generate-email" class="form-control" name="generate-email" type="email" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="generate-toggle-generate-cert" class="col-sm-2 control-label">Generate certificate and private key?</label>
+            <div class="col-sm-10">
+              <input type="checkbox" id="generate-toggle-generate-cert">
+            </div>
+          </div>
+          <div class="form-group" id="generate-form-group-cert"/>
+            <label for="generate-cert" class="col-sm-2 control-label">Certificate:</label>
+            <div class="col-sm-10">
+              <textarea id="generate-cert" class="form-control" name="generate cert" rows="8" cols="64"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-default">Generate</button>
+            </div>
+          </div>
+        </form>
+
+        <div id="generate-error"></div>
+
+        <div id="generate-result-section" style="display:none;">
+          <div id="generate-result-key-cert-section" style="display:none;">
+            <label for="generatePrivateKey">Private Key:</label>
+            <pre id="generatePrivateKey"></pre>
+            <label for="generateCertificate">Certificate:</label>
+            <pre id="generateCertificate"></pre>
+          </div>
+          <label for="generateSmimeaRr">SMIMEA Record:</label>
+          <pre id="generateSmimeaRr"></pre>
+        </div>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="lookup">
+        <div class="container">
+          <p>
+          Use the form below to search for SMIMEA records in the DNS using the Great DANE Engine.
+          </p>
+          <form id="lookup-form" class="form-horizontal">
+            <div class="form-group">
+              <label for="lookup-email" class="col-sm-2 control-label">Email Address:</label>
+              <div class="col-sm-10">
+                <input id="lookup-email" class="form-control" name="lookup-email" type="email" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Look up</button>
+              </div>
+            </div>
+          </form>
+
+          <div id="lookup-error"></div>
+
+          <div id="lookup-result-section" style="display:none;">
+            <label>S/MIME Certificates:</label>
+            <div id="lookup-results"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p class="text-muted">Copyright © 2017 Grier Forensics. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+$(function () {
+
+    $('#generate-toggle-generate-cert').click(function () {
+      $('#generate-form-group-cert').toggle();
+    });
+
+    $('#generate-form').submit(function() {
+        var email = $('#generate-email').val();
+        var path = '/connector/api/v1/record/'+email;
+        var data = null;
+        var generatingCert = $('#generate-toggle-generate-cert').is(':checked');
+        if (!generatingCert) {
+          data = JSON.stringify({certificates: [$('#generate-cert').val()]});
+        };
+        $('#generate-error').empty();
+        $.ajax({
+            url: path,
+            method: 'POST',
+            data: data,
+            contentType: "application/json",
+            dataType: 'json',
+            success: function (resp) {
+                if (generatingCert) {
+                  $('#generatePrivateKey').text(resp.privateKey);
+                  $('#generateCertificate').text(resp.certificate);
+                  $('#generate-result-key-cert-section').show();
+                }
+
+                $('#generateSmimeaRr').text(resp.records[0]);
+
+                $('#generate-result-section').show();
+            },
+            error: function (xhr, err, detail) {
+              var reason = detail;
+              if (xhr.status == 400) {
+                reason = 'Invalid S/MIME certificate';
+              }
+              $('#generate-error').html(buildErrorAlert(reason));
+            }
+        });
+
+        return false;
+    });
+
+    $('#lookup-form').submit(function() {
+        var email = $('#lookup-email').val();
+        var path = '/engine/'+email+'/pem';
+
+        $('#lookup-error').empty();
+
+        $.ajax({
+            url: path,
+            method: 'GET',
+            success: function (resp) {
+              $('#lookup-results').empty();
+              for (i = 0; i < resp.certificates.length; i++) {
+                var cert = $('<pre>').text(resp.certificates[i].data);
+                $('#lookup-results').append(cert);
+              }
+              $('#lookup-result-section').show();
+            },
+            error: function (xhr, err, detail) {
+              var reason = detail;
+              if (xhr.status == 404) {
+                reason = 'No SMIMEA records found for ' + email;
+              }
+              $('#lookup-error').html(buildErrorAlert(reason));
+            }
+        });
+
+        return false;
+
+    });
+
+
+  function buildErrorAlert(reason) {
+    return '<div class="alert alert-danger alert-dismissable" role="alert">' +
+        '  <button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+        '    <span aria-hidden="true">&times;</span>' +
+        '  </button>' +
+        '  <strong>ERROR</strong>: ' + reason +
+        ' </div>';
+  }
+
+});
+</script>
+
+</body>
+
+</html>
