@@ -1,0 +1,10 @@
+[Unit]
+Description=Great DANE Connector
+
+[Service]
+ExecStart=/root/connector-1.0/bin/service
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

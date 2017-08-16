@@ -1,0 +1,10 @@
+[Unit]
+Description=Great DANE Engine
+
+[Service]
+ExecStart=/root/great-dane-engine-1.1/bin/service
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

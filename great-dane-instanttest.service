@@ -1,0 +1,10 @@
+[Unit]
+Description=Great DANE Instant Test
+
+[Service]
+ExecStart=/root/instanttest-1.0/bin/service
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
