@@ -1,0 +1,2 @@
+# auto-renew SSL certs every Monday at 8am
+0 8 * * 0 /usr/bin/certbot renew
